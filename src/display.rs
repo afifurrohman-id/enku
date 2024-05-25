@@ -90,7 +90,7 @@ pub fn display_img_url(id: usize, url: &str) {
         .insert_adjacent_html(
             "afterBegin",
             format!(
-                r#"<img id="{}" src="{}" alt="dynamic image" title="dynamic image">"#,
+                r#"<img id="{}" src="{}" alt="dynamic image" title="dynamic image" draggable="true">"#,
                 id, url
             )
             .as_str(),
