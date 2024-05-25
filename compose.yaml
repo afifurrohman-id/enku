@@ -1,0 +1,16 @@
+services:
+  server:
+    #TODO: change to other image
+    image: afifurrohman/tiny-firebase
+    ports:
+      - 5000:5000
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 300M
+    command: firebase emulators:start -P $COMPOSE_PROJECT_NAME
+    volumes:
+      - ./firebase.json:/firebase/firebase.json
+      - ./assets:/firebase/assets

@@ -1,0 +1,136 @@
+body {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#loader {
+	background-color: rgba(0,0,0, 0.8);
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+
+}
+
+.spin {
+	border: 10px solid #f3f3f3;
+	border-top: 10px solid black;
+	border-radius: 50%;
+	width: 3em;
+	height: 3em;
+	animation: spin 1.5s linear infinite;
+
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+header {
+}
+
+h1 {
+	text-align: center;
+	font-size: 1rem;
+}
+
+details {
+	text-align: center;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+}
+
+figure {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border: 3px solid black;
+	width: max-content;
+}
+
+figure figcaption {
+	background-color: black;
+	color: white;
+	width: 100%;
+	padding: 1px 0px;
+	text-align: center;
+
+}
+
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(5, max-content);
+	place-items: center;
+	padding: 5px;
+}
+
+.blocked {
+	position: absolute;
+	z-index: 2;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+img {
+	border: 2px solid gray;
+	margin: 2px;
+	width: 12vw;
+}
+
+fieldset {
+	position: relative;
+	width: 50%;
+}
+
+fieldset label {
+	font-size: 1.2rem;
+}
+
+.correct {
+	color: green;
+}
+
+.incorrect {
+	color: red;
+}
+
+@media screen and (min-width: 576px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+	figure figcaption {
+		padding: 5px 0px;
+	}
+
+}
+
+@media screen and (min-width: 900px) { 
+
+	img {
+		width: initial;
+	}
+}
+
+
+

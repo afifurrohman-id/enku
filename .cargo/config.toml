@@ -1,0 +1,9 @@
+[alias]
+dev-lib="build --lib"
+lib="build -r --lib"
+# dev-lib-unit="test --lib"
+# lib-unit="test -r --lib"
+
+[build]
+target="wasm32-unknown-unknown"
+

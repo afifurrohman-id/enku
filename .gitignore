@@ -1,0 +1,28 @@
+# Logs
+logs
+*.log
+firebase-debug.log*
+firebase-debug.*.log*
+
+# cache
+target
+.firebase/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# IDE
+.vscode
+.idea
+
+# Binary
+*.wasm
+*.exe
+*.png
+
+# configuration
+.env
+.firebaserc
