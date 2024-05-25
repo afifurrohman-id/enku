@@ -73,9 +73,10 @@ pub async fn load_image(query: &str) -> Vec<u8> {
     opts.mode(RequestMode::Cors);
 
     let req = Request::new_with_str_and_init(&url, &opts).expect("request must be valid");
+    let png_mime = ImageFormat::Png.to_mime_type();
 
     req.headers()
-        .set("Accept", "image/png")
+        .set("Accept", png_mime)
         .expect("header must be valid");
 
     let window = web_sys::window().unwrap();
@@ -101,7 +102,7 @@ pub async fn load_image(query: &str) -> Vec<u8> {
         .expect("response must be valid type");
 
     if let Some(ct) = res.headers().get("Content-Type").unwrap_or_default() {
-        if !ct.contains("image/png") {
+        if !ct.contains(png_mime) {
             panic!("image must be png format");
         }
     }
