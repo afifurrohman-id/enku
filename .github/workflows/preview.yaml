@@ -2,8 +2,11 @@ on:
   pull_request:
 
 jobs:
-  build_and_preview:
+  preview:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      checks: write
     steps:
       - uses: actions/checkout@v4
       
@@ -15,7 +18,7 @@ jobs:
       
       - run: cargo install wasm-bindgen-cli
 
-      - run: make release
+      - run: make release -j 8
       
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
