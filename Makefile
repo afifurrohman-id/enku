@@ -19,6 +19,7 @@ release: src/lib.rs
 
 fix:
 	cargo clippy --fix --allow-dirty --allow-staged
+	cargo clippy --fix --allow-dirty --allow-staged -r
 
 server: compose.yaml
 	docker compose up -d

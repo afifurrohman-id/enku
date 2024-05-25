@@ -22,4 +22,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ENKU }}"
           expires: 7d
-          projectId: your-Firebase-project-ID
+          projectId: ${{secrets.FIREBASE_PROJECT}}

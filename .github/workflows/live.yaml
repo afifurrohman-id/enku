@@ -22,5 +22,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ENKU }}"
-          projectId: your-Firebase-project-ID
+          projectId: ${{secrets.FIREBASE_PROJECT}}
           channelId: live

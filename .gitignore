@@ -5,6 +5,7 @@ firebase-debug.log*
 firebase-debug.*.log*
 
 # cache
+.cache
 target
 .firebase/
 
@@ -26,3 +27,4 @@ pids
 # configuration
 .env
 .firebaserc
+.config
