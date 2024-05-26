@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
-use web_sys::{DragEvent, Element, HtmlImageElement, HtmlLabelElement};
+use web_sys::{DragEvent, Element, Event, HtmlImageElement, HtmlLabelElement};
 
 use crate::{data::Data, display, util};
 
@@ -10,11 +10,11 @@ pub fn puzzle_handler(urls: Vec<String>, data: Data) {
     let document = web_sys::window().unwrap().document().unwrap();
     let imgs = document.query_selector_all("figure img").unwrap();
 
-    let drag_over_handler =
-        Closure::new(Box::new(|e: DragEvent| e.prevent_default()) as Box<dyn FnMut(_)>);
-
     let urls = Rc::new(urls);
     let data = Rc::new(data);
+
+    let drag_over_handler =
+        Closure::new(Box::new(|e: DragEvent| e.prevent_default()) as Box<dyn FnMut(_)>);
 
     for i in 0..imgs.length() {
         let img = imgs
@@ -23,13 +23,39 @@ pub fn puzzle_handler(urls: Vec<String>, data: Data) {
             .dyn_into::<HtmlImageElement>()
             .unwrap();
 
+        let urls = Rc::clone(&urls);
+        let data = Rc::clone(&data);
+
+        if util::is_mobile() && !util::support_drag_drop() {
+            display::change_message("Tekan 2 gambar untuk menukarnya");
+
+            let click_handler = Closure::new(Box::new(move |e: Event| {
+                display::swap_img_src_on_touch(e);
+
+                let ok = display::compare_rand_urls(&urls);
+                if ok {
+                    success_handler(&data);
+                }
+            }) as Box<dyn FnMut(_)>);
+
+            img.add_event_listener_with_callback(
+                "touchstart",
+                click_handler.as_ref().unchecked_ref(),
+            )
+            .unwrap();
+
+            click_handler.forget();
+            continue;
+        }
+
         img.add_event_listener_with_callback(
             "dragover",
             drag_over_handler.as_ref().unchecked_ref(),
         )
         .unwrap();
 
-        let drag_start_handler = Closure::new(Box::new(display::send_src_url) as Box<dyn FnMut(_)>);
+        let drag_start_handler =
+            Closure::new(Box::new(display::send_img_src_on_drag) as Box<dyn FnMut(_)>);
 
         img.add_event_listener_with_callback(
             "dragstart",
@@ -37,11 +63,8 @@ pub fn puzzle_handler(urls: Vec<String>, data: Data) {
         )
         .unwrap();
 
-        let urls = Rc::clone(&urls);
-        let data = Rc::clone(&data);
-
         let drop_handler = Closure::new(Box::new(move |e: DragEvent| {
-            display::swap_url(e);
+            display::swap_img_src_on_drag(e);
 
             let ok = display::compare_rand_urls(&urls);
             if ok {

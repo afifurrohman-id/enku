@@ -1,10 +1,32 @@
 use std::fmt::Display;
 
-use wasm_bindgen::JsValue;
+use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{
     js_sys::{Array, Math, Uint8Array},
-    Blob, BlobPropertyBag,
+    Blob, BlobPropertyBag, HtmlElement,
 };
+
+pub fn is_mobile() -> bool {
+    let window = web_sys::window().unwrap();
+
+    let touch_start_exists = window.ontouchstart().is_some();
+    let touch_points = window.navigator().max_touch_points();
+    touch_start_exists || touch_points > 0
+}
+
+pub fn support_drag_drop() -> bool {
+    let document = web_sys::window().unwrap().document().unwrap();
+    let div = document
+        .create_element("div")
+        .unwrap()
+        .dyn_into::<HtmlElement>()
+        .unwrap();
+
+    div.draggable()
+        && div.ondragstart().is_some()
+        && div.ondrop().is_some()
+        && div.ondragover().is_some()
+}
 
 pub fn js_buffer_to_bytes(js_buff: &JsValue) -> Vec<u8> {
     let js_bytes = Uint8Array::new(js_buff);

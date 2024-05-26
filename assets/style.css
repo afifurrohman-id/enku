@@ -47,6 +47,11 @@ h1 {
 	font-size: 1rem;
 }
 
+p {
+	text-align: center;
+	opacity: 0.8;
+}
+
 details {
 	text-align: center;
 }
@@ -96,6 +101,7 @@ img {
 	border: 2px solid gray;
 	margin: 2px;
 	width: 12vw;
+	touch-action: none;
 }
 
 fieldset {
