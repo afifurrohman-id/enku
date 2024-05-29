@@ -17,7 +17,7 @@ jobs:
           targets: wasm32-unknown-unknown
           components: clippy, rustfmt
       
-      - run: cargo install wasm-bindgen-cli
+      - run: cargo install wasm-pack --locked
 
       - run: make release -j 8
       
