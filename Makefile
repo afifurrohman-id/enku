@@ -8,7 +8,7 @@ build: src/lib.rs
 release: src/lib.rs
 	$(MAKE) fix
 	cargo fmt
-	wasm-pack build --release $(WASM_FLAGS)
+	wasm-pack build $(WASM_FLAGS)
 
 fix:
 	cargo clippy --fix --allow-dirty --allow-staged
