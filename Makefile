@@ -1,21 +1,14 @@
+WASM_FLAGS=--no-typescript \
+      --no-pack -t web \
+      -d assets
 build: src/lib.rs
 	$(MAKE) fix
 	cargo fmt
-	cargo dev-lib
-	wasm-bindgen \
-	target/wasm32-unknown-unknown/debug/enku.wasm \
-	--target web --out-dir assets \
-	--no-typescript --remove-name-section \
-	--remove-producers-section
+	wasm-pack build --dev $(WASM_FLAGS)
 release: src/lib.rs
 	$(MAKE) fix
 	cargo fmt
-	cargo lib
-	wasm-bindgen \
-	target/wasm32-unknown-unknown/release/enku.wasm \
-	--target web --out-dir assets \
-	--no-typescript --remove-name-section \
-	--remove-producers-section
+	wasm-pack build --release $(WASM_FLAGS)
 
 fix:
 	cargo clippy --fix --allow-dirty --allow-staged

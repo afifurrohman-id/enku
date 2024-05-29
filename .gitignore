@@ -23,6 +23,8 @@ pids
 *.wasm
 *.exe
 *.png
+*.jpeg
+*.jpg
 
 # configuration
 .env
