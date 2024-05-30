@@ -15,7 +15,7 @@ where
     loop {
         let count = data.len();
 
-        if data.is_empty() || count == 0 {
+        if data.is_empty() {
             break;
         }
 
@@ -28,11 +28,41 @@ where
 
         let d = data.remove(i);
 
-        f(count, d);
+        f(count - 1, d);
     }
 }
 
 #[cfg(test)]
 mod tests {
-    //TODO
+    use wasm_bindgen_test::wasm_bindgen_test;
+
+    #[wasm_bindgen_test]
+    fn rand() {
+        let x = super::rand(10);
+        assert!(x < 10);
+        #[allow(clippy::absurd_extreme_comparisons)]
+        #[allow(unused_comparisons)]
+        let r = x >= 0;
+        assert!(r)
+    }
+
+    #[wasm_bindgen_test]
+    fn randomize() {
+        let data = &[1, 2, 3, 4, 5, 6, 7, 8];
+        let mut n = 0;
+        super::randomize(data, |i, v| {
+            #[allow(clippy::absurd_extreme_comparisons)]
+            #[allow(unused_comparisons)]
+            let r = i >= 0;
+            assert!(r);
+            assert!(i < 8);
+            assert!(v >= 1);
+            assert!(v <= 8);
+            assert!(data.contains(&v));
+
+            n += 1;
+        });
+
+        assert_eq!(data.len(), n);
+    }
 }
