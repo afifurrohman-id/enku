@@ -4,7 +4,7 @@ use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use web_sys::{DragEvent, Element, Event, HtmlImageElement, HtmlLabelElement};
 
-use super::common::{self, query_all_element};
+use super::common;
 use super::data::Data;
 use super::util;
 
@@ -112,7 +112,9 @@ fn display_choices(data: &Data) {
 
     util::randomize(data.choices(), |i, choice| {
         let i = i.to_string();
-        let id = if choice == data.choices()[0] {
+        let correct = data.choices()[0];
+
+        let id = if choice == correct {
             "correct"
         } else {
             i.as_str()
@@ -149,7 +151,7 @@ fn display_choices(data: &Data) {
 }
 
 fn set_choices_event() {
-    let input_choices = query_all_element("fieldset input").unwrap();
+    let input_choices = common::query_all_element("fieldset input").unwrap();
 
     let click_handler = Closure::new(Box::new(|_| {
         let v = r#"<div class="blocked"></div>"#;

@@ -1,0 +1,19 @@
+{
+    "name": "Enku - Crack puzzle get the word",
+    "short_name": "Enku",
+    "description": "Belajar bahasa inggris melalui game puzzle",
+    "id": "/",
+    "scope": "/",
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "display": "standalone",
+    "icons": [
+    ],
+    "screenshots": [
+    ],
+    "display_override": [
+        "standalone",
+        "window-controls-overlay"
+    ]
+}

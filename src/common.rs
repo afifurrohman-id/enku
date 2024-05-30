@@ -85,3 +85,29 @@ pub fn bytes_to_js_blob(buffer: &[u8], mime: &str) -> Blob {
 
     Blob::new_with_u8_array_sequence_and_options(&arr, &opts).unwrap()
 }
+
+#[cfg(test)]
+mod tests {
+    use wasm_bindgen_test::wasm_bindgen_test;
+    use web_sys::js_sys::Uint8Array;
+
+    #[wasm_bindgen_test]
+    fn bytes_to_js_blob() {
+        let mime = "text/plain";
+        let blob = super::bytes_to_js_blob(&[0b01100001, 0b01100001, 0b01100001], mime);
+
+        assert_eq!(blob.type_(), mime);
+        assert_eq!(blob.size(), 3.0);
+    }
+
+    #[wasm_bindgen_test]
+    fn js_buffer_to_bytes() {
+        let arr = &[1, 2, 3];
+        let js_bytes = Uint8Array::new_with_length(arr.len() as u32);
+        js_bytes.copy_from(arr);
+
+        let bytes = super::js_buffer_to_bytes(&js_bytes);
+        assert_eq!(bytes.len(), arr.len());
+        assert_eq!(bytes, arr);
+    }
+}

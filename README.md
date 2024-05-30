@@ -11,6 +11,8 @@
 - [x] Wasm Pack Cli (version >= 0.12.x)
 - [x] Git (version >= 2.43.x)
 - [x] Docker (version >= 24.0.x)
+- [ ] Node (version >= 20.14.x)
+  > Only if you want to test
 
 
 ### Installation
@@ -53,4 +55,9 @@ make
 - Build app (release)
 ```sh
 make release
+```
+
+- Test (Unit Test)
+```sh
+make test
 ```

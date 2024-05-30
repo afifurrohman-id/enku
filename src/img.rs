@@ -42,18 +42,19 @@ pub fn crop_image(buff: &[u8]) -> Vec<Vec<u8>> {
 }
 
 pub fn create_imgs_url(imgs: &[Vec<u8>]) -> Vec<String> {
-    let mut correct_data = Vec::new();
+    let mut urls = Vec::new();
 
     for buff in imgs {
         let blob = common::bytes_to_js_blob(buff, ImageFormat::Jpeg.to_mime_type());
 
         let url = Url::create_object_url_with_blob(&blob).unwrap();
-        correct_data.push(url);
+        urls.push(url);
     }
 
-    correct_data
+    urls
 }
 
+#[allow(unused_variables)]
 pub async fn load_image(query: &str) -> Vec<u8> {
     #[cfg(not(debug_assertions))]
     let url = format!(
@@ -94,4 +95,18 @@ pub async fn load_image(query: &str) -> Vec<u8> {
     let js_buff = JsFuture::from(res.array_buffer().unwrap()).await.unwrap();
 
     common::js_buffer_to_bytes(&js_buff)
+}
+
+#[cfg(test)]
+mod tests {
+    use wasm_bindgen_test::wasm_bindgen_test;
+
+    #[wasm_bindgen_test]
+    fn create_imgs_url() {
+        let buff = &[vec![0b01100001], vec![0b01100001], vec![0b01100001]];
+        let urls = super::create_imgs_url(buff);
+        assert_eq!(urls.len(), buff.len());
+        urls.iter()
+            .for_each(|url| assert!(url.starts_with("blob:")))
+    }
 }
