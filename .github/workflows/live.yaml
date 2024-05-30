@@ -27,6 +27,8 @@ jobs:
 
       - run: rustup target add wasm32-unknown-unknown
 
+      - run: cargo install wasm-pack
+
       - name: Test (unit)
         run: make test -j 8
 
