@@ -33,9 +33,9 @@ cd enku
 
 > image should meet following requirement:
 
-- [x] Valid jpeg format
+- [x] Valid png format
 - [x] 512x512 height and width
-- [x] Filename is `sample.jpeg`
+- [x] Filename is `sample.png`
 
 
 ### Run
@@ -43,7 +43,7 @@ cd enku
 - Run Server
 
 ```sh
-make server
+make run 
 ```
 
 - Build app (debug)

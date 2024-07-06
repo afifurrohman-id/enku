@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 use web_sys::js_sys::Math;
 
+/// add a random number between 0 and count-1
 pub fn rand(count: usize) -> usize {
     Math::floor(Math::random() * count as f64) as usize
 }
