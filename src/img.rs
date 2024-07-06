@@ -5,14 +5,18 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response, Url};
 
+use crate::util::rand;
+
 use super::common;
+
+const IMAGE_FORMAT: ImageFormat = ImageFormat::Png;
 
 pub fn crop_image(buff: &[u8]) -> Vec<Vec<u8>> {
     const DIMENSION_SIZE: u32 = 512;
     const PART_SIZE: u32 = 100;
     // const PART_SIZE: u32 = 50;
 
-    let mut img = image::load_from_memory_with_format(buff, image::ImageFormat::Jpeg).unwrap();
+    let mut img = image::load_from_memory_with_format(buff, IMAGE_FORMAT).unwrap();
 
     let (width, height) = img.dimensions();
     assert_eq!(width, DIMENSION_SIZE, "width must be 512");
@@ -32,7 +36,7 @@ pub fn crop_image(buff: &[u8]) -> Vec<Vec<u8>> {
 
             let mut buffer = Cursor::new(Vec::new());
             cropped_img
-                .write_to(&mut buffer, ImageFormat::Jpeg)
+                .write_to(&mut buffer, IMAGE_FORMAT)
                 .unwrap();
             let buffer = buffer.into_inner();
             results.push(buffer)
@@ -45,7 +49,7 @@ pub fn create_imgs_url(imgs: &[Vec<u8>]) -> Vec<String> {
     let mut urls = Vec::new();
 
     for buff in imgs {
-        let blob = common::bytes_to_js_blob(buff, ImageFormat::Jpeg.to_mime_type());
+        let blob = common::bytes_to_js_blob(buff, IMAGE_FORMAT.to_mime_type());
 
         let url = Url::create_object_url_with_blob(&blob).unwrap();
         urls.push(url);
@@ -56,16 +60,25 @@ pub fn create_imgs_url(imgs: &[Vec<u8>]) -> Vec<String> {
 
 #[allow(unused_variables)]
 pub async fn load_image(query: &str) -> Vec<u8> {
+    const IMAGE_COUNT: usize = 3;
+
+    let x = rand(IMAGE_COUNT) + 1;
+
+    let ext = IMAGE_FORMAT.extensions_str().first().unwrap();
+
     #[cfg(not(debug_assertions))]
     let url = format!(
-        "https://source.unsplash.com/random/512x512?{}",
+        "https://acbtwffwdoxzwlfgpisu.supabase.co/storage/v1/object/public/projects/enku/images/random/{}/{}.{}",
         query.to_lowercase(),
+        x,
+        ext
     );
 
     #[cfg(debug_assertions)]
     let url = format!(
-        "{}sample.jpeg",
-        web_sys::window().unwrap().location().href().unwrap()
+        "{}sample.{}",
+        web_sys::window().unwrap().location().href().unwrap(),
+        ext
     );
 
     let mut opts = RequestInit::new();
@@ -73,9 +86,9 @@ pub async fn load_image(query: &str) -> Vec<u8> {
     opts.mode(RequestMode::Cors);
 
     let req = Request::new_with_str_and_init(&url, &opts).unwrap();
-    let jpeg_mime = ImageFormat::Jpeg.to_mime_type();
+    let mime_img = IMAGE_FORMAT.to_mime_type();
 
-    req.headers().set("Accept", jpeg_mime).unwrap();
+    req.headers().set("Accept", mime_img).unwrap();
 
     let window = web_sys::window().unwrap();
 
@@ -87,8 +100,8 @@ pub async fn load_image(query: &str) -> Vec<u8> {
     let res = res.dyn_into::<Response>().unwrap();
 
     if let Some(ct) = res.headers().get("Content-Type").unwrap_or_default() {
-        if !ct.contains(jpeg_mime) {
-            panic!("image must be jpeg format");
+        if !ct.contains(mime_img) {
+            panic!("image must be {} format", mime_img);
         }
     }
 
