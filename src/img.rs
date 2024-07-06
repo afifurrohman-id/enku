@@ -35,9 +35,9 @@ pub fn crop_image(buff: &[u8]) -> Vec<Vec<u8>> {
             let cropped_img = img.crop(start_x, start_y, PART_SIZE, PART_SIZE);
 
             let mut buffer = Cursor::new(Vec::new());
-            cropped_img
-                .write_to(&mut buffer, IMAGE_FORMAT)
-                .unwrap();
+
+            cropped_img.write_to(&mut buffer, IMAGE_FORMAT).unwrap();
+
             let buffer = buffer.into_inner();
             results.push(buffer)
         }
