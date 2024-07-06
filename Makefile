@@ -9,7 +9,7 @@ release: src/lib.rs
 test: src/lib.rs
 	wasm-pack test --node
 
-server: compose.yaml
+run: compose.yaml
 	docker compose up -d
 
 
